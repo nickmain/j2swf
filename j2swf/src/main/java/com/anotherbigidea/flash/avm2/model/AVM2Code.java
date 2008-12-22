@@ -719,6 +719,20 @@ public final class AVM2Code {
 		}
 	}
 
+    /**
+     * Coerce stack top to the given type
+     */
+    public void coerceTo( AVM2QName type ) {
+        instructions.append( OP_coerce, type );
+    }
+
+    /**
+     * Coerce stack top to the given type
+     */
+    public void coerceTo( String type ) {
+        instructions.append( OP_coerce, new AVM2QName( type ));
+    }
+	
 	/**
 	 * Coerce stack top to an object
 	 */
@@ -803,7 +817,62 @@ public final class AVM2Code {
 	public void callPropVoid( String qualifiedName, int argCount ) {
 		instructions.append( OP_callpropvoid, new AVM2QName( qualifiedName ), argCount );
 	}
-	   
+
+    /**
+     * Call a void function
+     * 
+     * @param local the local var containing the object
+     * @param qualifiedName the property name of the function
+     * @param args the args - must be String, Double, Integer or Boolean
+     */
+    public void callPropVoid( LocalValue<Instruction> local, String qualifiedName, Object...args ) {
+        getLocal( local );
+        for( Object arg : args ) {
+            push( arg );
+        }
+        callPropVoid( qualifiedName, args.length );
+    }
+
+    /**
+     * Call a function
+     * 
+     * @param local the local var containing the object
+     * @param qualifiedName the property name of the function
+     * @param args the args - must be String, Double, Integer or Boolean
+     */
+    public void callProperty( LocalValue<Instruction> local, String qualifiedName, Object...args ) {
+        getLocal( local );
+        for( Object arg : args ) {
+            push( arg );
+        }
+        callProperty( qualifiedName, args.length );
+    }
+    
+	/**
+	 * Call a void function
+	 * @param qualifiedName the property name of the function
+	 * @param args the args - must be String, Double, Integer or Boolean
+	 */
+	public void callPropVoid( String qualifiedName, Object...args ) {
+	    for( Object arg : args ) {
+	        push( arg );
+	    }
+	    callPropVoid( qualifiedName, args.length );
+	}
+
+	/**
+     * Call a function
+     * 
+     * @param qualifiedName the property name of the function
+     * @param args the args - must be String, Double, Integer or Boolean
+     */
+    public void callProperty( String qualifiedName, Object...args ) {
+        for( Object arg : args ) {
+            push( arg );
+        }
+        callProperty( qualifiedName, args.length );
+    }
+	
     /**
      * Call a property on an object.  There is no return value.
      * 
@@ -1064,7 +1133,7 @@ public final class AVM2Code {
 		body.scopeDepth = avm2Class.staticInitializer.methodBody.scopeDepth + 1;
 			
 		AVM2Code code = new AVM2Code( body );
-		code.setupDynamicScope();
+		code.setupInitialScope();
         code.trace( "entering constructor for " + avm2Class.name );
 
 		

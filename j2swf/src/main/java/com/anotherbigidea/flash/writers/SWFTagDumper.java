@@ -39,13 +39,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 
 import org.epistem.io.InStream;
 import org.epistem.io.IndentingPrintWriter;
+import org.epistem.j2swf.swf.FileAttribute;
 import org.epistem.util.CommandLineArgs;
+import org.epistem.util.FlagIO;
 import org.epistem.util.Hex;
 
 import com.anotherbigidea.flash.SWFConstants;
@@ -924,14 +924,14 @@ public class SWFTagDumper
         }        
     }
     
-    
-    
     /** @see com.anotherbigidea.flash.interfaces.SWFTagTypes#tagFileAttributes(int) */
     public void tagFileAttributes(int flags) throws IOException {
-        print( "file-attributes" );
-        if(( flags & SWFConstants.FILE_ATTRIBUTES_HAS_METADATA ) != 0 ) print( " has-metadata" );
-        if(( flags & SWFConstants.FILE_ATTRIBUTES_ALLOW_AS3    ) != 0 ) print( " allow-as3" );
-        if(( flags & SWFConstants.FILE_ATTRIBUTES_USE_NETWORK  ) != 0 ) print( " use-network" );
+        print( "file-attributes:" );
+        
+        for( FileAttribute attr : FlagIO.parse( FileAttribute.class, flags ) ) {
+            print( " " + attr.name() );
+        }
+        
         println( "" );
     }
 

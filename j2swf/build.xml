@@ -1,0 +1,41 @@
+<project basedir="." name="J2SWF" default="all">
+	<property file="build.properties" />
+	
+	<!-- Build everything -->
+	<target name="all" 
+		    depends="clean,compile,make-jar,clean-classes">	
+	</target>
+	
+    <!-- Clean the build results -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+    <!-- Clean the compiled classes -->
+    <target name="clean-classes">
+        <delete dir="${build.classes}" />
+    </target>
+	
+    <!-- Make the complete jar -->
+    <target name="make-jar">
+        <jar destfile="${j2swf.jar}">
+            <fileset dir="${build.classes}" />
+            <fileset dir="src/ant/resources" />
+        </jar>        
+    </target>
+	
+    <!-- Compile everything -->
+    <target name="compile" >
+    	<mkdir dir="${build.classes}" />
+        <javac
+        	classpath="${build.dependencies}"
+        	destdir  ="${build.classes}"
+        	source   ="1.5"
+        	debug    ="${build.debug}"
+        	>
+        	<src path="src/main/java" />
+            <src path="src/ant/java" />
+        </javac>    
+    </target>
+	
+</project>

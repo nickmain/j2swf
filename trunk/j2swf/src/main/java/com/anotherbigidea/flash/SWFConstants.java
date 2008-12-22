@@ -260,9 +260,11 @@ public interface SWFConstants
     public static final int FLASH_9               = 9;
     
     //--Flags for FileAttributes tag
-    public static final int FILE_ATTRIBUTES_HAS_METADATA = 0x10;
-    public static final int FILE_ATTRIBUTES_ALLOW_AS3    = 0x08;
-    public static final int FILE_ATTRIBUTES_USE_NETWORK  = 0x01;
+    public static final int FILE_ATTRIBUTES_USE_DIRECT_BLT = 0x40;
+    public static final int FILE_ATTRIBUTES_USE_GPU        = 0x20;
+    public static final int FILE_ATTRIBUTES_HAS_METADATA   = 0x10;
+    public static final int FILE_ATTRIBUTES_AS3            = 0x08;
+    public static final int FILE_ATTRIBUTES_USE_NETWORK    = 0x01;
     
     //--Flags for the DoABC tag
     public static final int DO_ABC_LAZY_INITIALIZE_FLAG = 0x01; //set to cause the ABC file to be initialized lazily

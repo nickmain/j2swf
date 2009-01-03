@@ -1,24 +1,27 @@
 package org.epistem.j2swf.swf.code;
 
-import static com.anotherbigidea.flash.avm2.Operation.*;
-import static com.anotherbigidea.flash.avm2.model.AVM2StandardNamespace.EmptyPackage;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.epistem.code.LocalValue;
-
+import com.anotherbigidea.flash.avm2.MethodInfoFlags;
 import com.anotherbigidea.flash.avm2.NamespaceKind;
-import com.anotherbigidea.flash.avm2.instruction.Instruction;
 import com.anotherbigidea.flash.avm2.model.*;
 
 /**
  * A class
  *
+ * This is still half baked - fix it up later
+ *
  * @author nickmain
  */
 public class CodeClass {
 
-    private final AVM2ABCFile abcFile;    
-    private final AVM2Class avm2class;
+    public final AVM2ABCFile abcFile; //TODO: this should be hidden 
+    public final AVM2Class avm2class; //TODO: this should be hidden
+    
     private final int scopeDepth;
+    private final Set<CodeMethod> methods = new HashSet<CodeMethod>();
     
     /**
      * @param name the fully qualified class name
@@ -66,42 +69,15 @@ public class CodeClass {
         //create the static initializer
         AVM2Code.defaultStaticInit( avm2class, scopeDepth );
         //TODO:expose non-default static init
-        
-        //no-arg constructor
-        AVM2Code cons = AVM2Code.startNoArgConstructor( avm2class );
-        THIS_IS_ONLY_FOR_DEV_PURPOSES( cons );
-    }
-    
-    private void THIS_IS_ONLY_FOR_DEV_PURPOSES( AVM2Code cons ) {
-        
-        cons.trace( "In Constructor" );
-        cons.getLocal( cons.thisValue );
-        cons.getProperty( "graphics" );
-        cons.coerceTo( "flash.display.Graphics" );
-
-        LocalValue<Instruction> g = cons.newLocal();
-        cons.setLocal( g );
-
-        cons.callPropVoid( g, "beginFill", 0x888800 );
-        cons.callPropVoid( g, "lineStyle", 5, 0x000088 );
-        cons.callPropVoid( g, "moveTo", 10, 10 );
-        cons.callPropVoid( g, "lineTo", 90, 10 );
-        cons.callPropVoid( g, "lineTo", 90, 90 );
-        cons.callPropVoid( g, "lineTo", 10, 90 );
-        cons.callPropVoid( g, "lineTo", 10, 10 );
-        cons.callPropVoid( g, "endFill" );
-
-        cons.trace( "At end of Constructor" );
-        
-        cons.returnVoid();    
-        cons.analyze();
     }
     
     /**
      * Prepare the class for writing - perform any code analysis etc
      */
     /*pkg*/ void prepareForWriting() {
-        //TODO: prepare all methods
+        for( CodeMethod method : methods ) method.prepareForWriting();
+
+        
         //TODO: prepare static init
         //TODO: prepare constructor
     }
@@ -120,4 +96,42 @@ public class CodeClass {
         return avm2class.superclass.toString();
     }
     
+    /**
+     * Add an instance method
+     * 
+     * @param name the method name
+     * @param returnType the return type
+     * @param isFinal whether final
+     * @param isOverride whether an override method
+     * @param paramTypes the parameters types
+     */
+    public CodeMethod addInstanceMethod( AVM2QName name, AVM2Name returnType,
+                                         boolean isFinal, boolean isOverride, 
+                                         AVM2Name... paramTypes ) {
+        
+        AVM2Method method = new AVM2Method( returnType, null );
+        method.methodBody.scopeDepth = scopeDepth + 1;
+        AVM2MethodSlot slot = avm2class.traits.addMethod( name, method, isFinal, isOverride );
+        CodeMethod cm = new CodeMethod( this, slot, paramTypes );
+        methods.add( cm );
+        return cm;
+    }
+    
+    /**
+     * Add a static method
+     * 
+     * @param name the method name
+     * @param paramTypes the parameters types
+     * @param returnType the return type
+     */
+    public CodeMethod addStaticMethod( AVM2QName name, AVM2Name returnType, 
+                                       AVM2Name... paramTypes ) {
+        
+        AVM2Method method = new AVM2Method( returnType, null );
+        method.methodBody.scopeDepth = scopeDepth;
+        AVM2MethodSlot slot = avm2class.staticTraits.addMethod( name, method, false, false );
+        CodeMethod cm = new CodeMethod( this, slot, paramTypes );
+        methods.add( cm );
+        return cm;
+    }
 }

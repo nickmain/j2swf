@@ -48,7 +48,7 @@ public enum Operation {
     OP_convert_o        ( 0x77, 1, 1, 0, 0 ),
     OP_convert_s        ( 0x70, 1, 1, 0, 0 ),
     OP_convert_u        ( 0x74, 1, 1, 0, 0 ),
-    OP_debug            ( 0xEF, 0, 0, 0, 0 ),
+    OP_debug            ( 0xEF, 0, 0, 0, 0, BYTE, STRING_INDEX, BYTE, SHORT ),
     OP_debugfile        ( 0xF1, 0, 0, 0, 0, STRING_INDEX ),
     OP_debugline        ( 0xF0, 0, 0, 0, 0, LINE_NUMBER ),
     OP_declocal         ( 0x94, 0, 0, 0, 0, REGISTER ),

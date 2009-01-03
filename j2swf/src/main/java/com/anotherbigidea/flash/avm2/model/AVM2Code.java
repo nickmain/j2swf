@@ -882,6 +882,16 @@ public final class AVM2Code {
     public void callPropVoid( AVM2QName qualifiedName, int argCount ) {
         instructions.append( OP_callpropvoid, qualifiedName, argCount );
     }
+
+    /**
+     * Call a super property on an object.  There is no return value.
+     * 
+     * @param qualifiedName the prop name
+     * @param argCount the number of arguments
+     */
+    public void callSuperVoid( AVM2QName qualifiedName, int argCount ) {
+        instructions.append( OP_callsupervoid, qualifiedName, argCount );
+    }
 	
     /**
      * Call a property on an object.
@@ -893,6 +903,16 @@ public final class AVM2Code {
         instructions.append( OP_callproperty, qualifiedName, argCount );
     }
 
+    /**
+     * Call a super property on an object.
+     * 
+     * @param qualifiedName the prop name
+     * @param argCount the number of arguments
+     */
+    public void callSuperProperty( AVM2QName qualifiedName, int argCount ) {
+        instructions.append( OP_callsuper, qualifiedName, argCount );
+    }
+    
     /**
      * Call a property on an object.
      * 
@@ -1134,9 +1154,6 @@ public final class AVM2Code {
 			
 		AVM2Code code = new AVM2Code( body );
 		code.setupInitialScope();
-        code.trace( "entering constructor for " + avm2Class.name );
-
-		
 		code.getLocal( code.thisValue );
 
 		int argCount = 0;
@@ -1166,7 +1183,8 @@ public final class AVM2Code {
 
         AVM2Code code = new AVM2Code( initBody );
         code.setupDynamicScope();
-        code.trace( "entering static initializer for " + avm2Class.name );
+
+        code.trace( "J2AVM: entering static initializer for " + avm2Class.name );
         
         return code;
     }
@@ -1234,7 +1252,7 @@ public final class AVM2Code {
             code = new AVM2Code( body );
             code.setupInitialScope();
             code.findPropStrict( avm2Class.name );
-            code.trace( "entering class initialization script for " + avm2Class.name );
+            code.trace( "J2AVM: entering class initialization script for " + avm2Class.name );
             
             AVM2QName classQName = avm2Class.name;
             

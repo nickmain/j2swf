@@ -18,6 +18,10 @@ public class AVM2Namespace implements Comparable<AVM2Namespace> {
     public final static AVM2Namespace privateNamespace = 
         new AVM2Namespace( NamespaceKind.PrivateNamespace, null ); 
     
+    /** A singleton for the public namespace */
+    public final static AVM2Namespace publicNamespace = 
+        new AVM2Namespace( NamespaceKind.PackageNamespace, "" ); 
+    
     /**
      * @param kind the namespace kind
      * @param name the namespace name - may be null (wildcard or moot)

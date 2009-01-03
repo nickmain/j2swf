@@ -8,34 +8,10 @@ import java.util.Set;
 
 import org.epistem.io.InStream;
 
-import com.anotherbigidea.flash.avm2.ABC;
-import com.anotherbigidea.flash.avm2.ArgType;
-import com.anotherbigidea.flash.avm2.InstanceInfoFlags;
-import com.anotherbigidea.flash.avm2.MethodInfoFlags;
-import com.anotherbigidea.flash.avm2.MultiNameKind;
-import com.anotherbigidea.flash.avm2.NamespaceKind;
-import com.anotherbigidea.flash.avm2.ValueKind;
+import com.anotherbigidea.flash.avm2.*;
 import com.anotherbigidea.flash.avm2.instruction.Instruction;
 import com.anotherbigidea.flash.avm2.instruction.InstructionsImpl;
-import com.anotherbigidea.flash.avm2.model.AVM2ABCFile;
-import com.anotherbigidea.flash.avm2.model.AVM2Class;
-import com.anotherbigidea.flash.avm2.model.AVM2ClassSlot;
-import com.anotherbigidea.flash.avm2.model.AVM2DefaultValue;
-import com.anotherbigidea.flash.avm2.model.AVM2ExceptionHandler;
-import com.anotherbigidea.flash.avm2.model.AVM2FunctionSlot;
-import com.anotherbigidea.flash.avm2.model.AVM2Getter;
-import com.anotherbigidea.flash.avm2.model.AVM2Metadata;
-import com.anotherbigidea.flash.avm2.model.AVM2Method;
-import com.anotherbigidea.flash.avm2.model.AVM2MethodBody;
-import com.anotherbigidea.flash.avm2.model.AVM2MethodSlot;
-import com.anotherbigidea.flash.avm2.model.AVM2Name;
-import com.anotherbigidea.flash.avm2.model.AVM2Namespace;
-import com.anotherbigidea.flash.avm2.model.AVM2QName;
-import com.anotherbigidea.flash.avm2.model.AVM2Script;
-import com.anotherbigidea.flash.avm2.model.AVM2Setter;
-import com.anotherbigidea.flash.avm2.model.AVM2Slot;
-import com.anotherbigidea.flash.avm2.model.AVM2Trait;
-import com.anotherbigidea.flash.avm2.model.AVM2Traits;
+import com.anotherbigidea.flash.avm2.model.*;
 
 /**
  * ABC implementation to build AVM2ABCFile objects.
@@ -470,7 +446,6 @@ public class AVM2ABCBuilder implements ABC {
         @Override
         public void bytecode(byte[] code) {
             InStream in = new InStream( code );
-
             while( in.getBytesRead() < code.length ) {
                 try {
                     Instruction instr = Instruction.parse( in );

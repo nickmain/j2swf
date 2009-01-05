@@ -200,7 +200,9 @@ public class AVM2ABCBuilder implements ABC {
                     AVM2Name type = AVM2Name.atIndex( pool, paramTypes[i] );
                     String   name = null;
                     if( paramNames != null && i < paramNames.length ) {
-                        name = pool.stringAt( paramNames[i] );
+                        if( paramNames[i] != 0 ) {
+                            name = pool.stringAt( paramNames[i] );
+                        }
                     }
                     
                     AVM2DefaultValue value = null;                        

@@ -2,6 +2,7 @@ package com.anotherbigidea.flash.avm2.model;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.epistem.io.IndentingPrintWriter;
@@ -40,6 +41,15 @@ public abstract class AVM2Name implements Comparable<AVM2Name> {
         this.kind         = kind;
     }
 
+    /*pkg*/ AVM2Name( MultiNameKind kind, 
+            String name, AVM2Namespace... namespaceSet ) {
+
+        this.namespaceSet = new ArrayList<AVM2Namespace>( Arrays.asList( namespaceSet ) );
+        this.namespace    = null;
+        this.name         = name;
+        this.kind         = kind;
+    }
+    
     /** @see java.lang.Object#equals(java.lang.Object) */
     @Override
     public boolean equals(Object obj) {

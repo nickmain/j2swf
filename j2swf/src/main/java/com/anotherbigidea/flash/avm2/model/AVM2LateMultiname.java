@@ -25,4 +25,12 @@ public class AVM2LateMultiname extends AVM2Name {
     public AVM2LateMultiname( List<AVM2Namespace> namespaceSet ) {
         super( MultiNameKind.MultinameL, null, null, namespaceSet );
     }
+    
+    
+    /**
+     * @param namespaces the set of namespaces
+     */
+    public AVM2LateMultiname( AVM2Namespace... namespaces ) {
+        super( MultiNameKind.MultinameL, null, namespaces );
+    }
 }

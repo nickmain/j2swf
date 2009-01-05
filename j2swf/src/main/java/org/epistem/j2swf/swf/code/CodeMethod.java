@@ -25,7 +25,6 @@ public class CodeMethod {
         }
         
         code = new AVM2Code( methodSlot.method.methodBody, null, paramTypes.length, false );
-        code.setupInitialScope();
     }
     
     /**

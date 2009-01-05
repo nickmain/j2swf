@@ -401,6 +401,13 @@ public final class AVM2Code {
         callPropVoid( "trace", 1 ); 
     }	
 	
+    /**
+     * 
+     */
+    public void lookupSwitch() {
+        
+    }
+    
 	/**
 	 * Increment a local register as an int
 	 */
@@ -480,6 +487,20 @@ public final class AVM2Code {
         instructions.append( OP_getproperty, name );
     }
 	
+    /**
+     * Check whether top is of the given type
+     */
+    public void isType( AVM2Name typeName ) {
+        instructions.append( OP_istype, typeName );
+    }
+
+    /**
+     * Check whether top is of the given runtime type
+     */
+    public void isTypeLate() {
+        instructions.append( OP_istypelate );
+    }
+    
 	/**
 	 * Duplicate the top stack value
 	 */
@@ -514,13 +535,69 @@ public final class AVM2Code {
         for( Object arg : args ) push( arg );
         callPropVoid( qualifiedName, args.length );				
 	}
+
+	/**
+     * Bitwise AND
+     */
+    public void bitAnd() {
+        instructions.append( OP_bitand );
+    }
+
+    /**
+     * Bitwise OR
+     */
+    public void bitOr() {
+        instructions.append( OP_bitor );
+    }
+
+    /**
+     * Bitwise XOR
+     */
+    public void bitXor() {
+        instructions.append( OP_bitxor );
+    }
 	
 	/**
-	 * Add, with type conversion.
+	 * Negate, with type conversion.
 	 */
-	public void add() {
-	    instructions.append( OP_add );
+	public void negate() {
+	    instructions.append( OP_negate );
 	}
+
+    /**
+     * Negate ints, with conversion if required.
+     */
+    public void negateInts() {
+        instructions.append( OP_negate_i );
+    }
+
+    /**
+     * Integer left shift
+     */
+    public void shiftLeft() {
+        instructions.append( OP_lshift );
+    }
+    
+    /**
+     * Integer right shift
+     */
+    public void shiftRight() {
+        instructions.append( OP_rshift );
+    }
+
+    /**
+     * Integer unsigned right shift
+     */
+    public void shiftRightUnsigned() {
+        instructions.append( OP_urshift );
+    }
+    
+    /**
+     * Add, with type conversion.
+     */
+    public void add() {
+        instructions.append( OP_add );
+    }
 
     /**
      * Add ints, with conversion if required.
@@ -528,7 +605,7 @@ public final class AVM2Code {
     public void addInts() {
         instructions.append( OP_add_i );
     }
-	
+
     /**
      * Subtract, with type conversion.
      */
@@ -1020,7 +1097,7 @@ public final class AVM2Code {
 	 * @param index the register index
 	 */
 	public void setLocal( LocalValue<Instruction> local ) {
-	    instructions.append( OP_coerce_a );
+	    instructions.append( OP_coerce_a ); //TODO: need better analysis so this coersion is not always required
         instructions.append( OP_setlocal, local );
 	}
 	
@@ -1069,6 +1146,13 @@ public final class AVM2Code {
 		instructions.append( OP_getlex, name );
 	}
 
+    /**
+     * A no-op
+     */
+    public void nop() {
+        instructions.append( OP_nop );
+    }
+	
 	/**
 	 * Pop the superclass and create a new instance of the given class.
 	 */
@@ -1126,7 +1210,16 @@ public final class AVM2Code {
     public void constructProp( String name, int argCount ) {
         instructions.append( OP_constructprop, new AVM2QName( name ), argCount );
     }
-
+    
+    /**
+     * Construct an object from a property function
+     * 
+     * @param name the property name
+     * @param argCount the argument count
+     */
+    public void constructProp( AVM2Name name, int argCount ) {
+        instructions.append( OP_constructprop, name, argCount );
+    }
 	
 	/**
 	 * Throw the exception from the stack
@@ -1153,7 +1246,6 @@ public final class AVM2Code {
 		body.scopeDepth = avm2Class.staticInitializer.methodBody.scopeDepth + 1;
 			
 		AVM2Code code = new AVM2Code( body );
-		code.setupInitialScope();
 		code.getLocal( code.thisValue );
 
 		int argCount = 0;
@@ -1204,7 +1296,6 @@ public final class AVM2Code {
         initBody.scopeDepth = classScopeDepth;
 
         AVM2Code code = new AVM2Code( initBody );
-        code.setupInitialScope();
         code.returnVoid();
         code.analyze();
     }

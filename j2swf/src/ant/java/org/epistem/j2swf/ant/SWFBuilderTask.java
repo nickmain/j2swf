@@ -8,6 +8,8 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Sequential;
 import org.epistem.j2swf.swf.SWFFile;
 
+import com.anotherbigidea.flash.structs.Color;
+
 /**
  * ANT task for creating a SWF file. This is a task container.
  *
@@ -17,6 +19,7 @@ public class SWFBuilderTask extends Sequential {
 
     private SWFFile builder;
     private File swfFile;    
+    private boolean compressed;
     
     /**
      * @param width the movie width in pixels
@@ -50,14 +53,14 @@ public class SWFBuilderTask extends Sequential {
      * @param background the RGB background color
      */
     public void setBackground( int background ) {
-        builder.setBackground( background );
+        builder.setBackground( new Color( background ));
     }
 
     /**
      * @param compressed whether the movie is compressed
      */
     public void setCompressed( boolean compressed ) {
-        builder.setCompressed( compressed );
+        this.compressed = compressed;
     }
     
     /**
@@ -84,7 +87,7 @@ public class SWFBuilderTask extends Sequential {
         super.execute(); //process the nested tasks
         
         try {
-            builder.write( swfFile );
+            builder.write( swfFile, compressed );
         } catch( IOException ioe ) {
             throw new BuildException( ioe );
         }

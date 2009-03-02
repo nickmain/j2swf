@@ -28,7 +28,7 @@ public class AVM2QName extends AVM2Name {
     }    
     
     /**
-     * Get the as a fully qualified name string
+     * Get the name as a fully qualified string
      */
     public String toQualString() {
         return namespace.name + "." + name;

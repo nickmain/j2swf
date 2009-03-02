@@ -62,9 +62,9 @@ public enum ValueKind {
             case CONSTANT_Double:    out.print( value ); break;
             case CONSTANT_Namespace: ((AVM2Namespace) value).dump( out ); break;
             case CONSTANT_Multiname: ((AVM2Name     ) value).dump( out ); break;
-            case CONSTANT_False:
-            case CONSTANT_True:
-            case CONSTANT_Null:
+            case CONSTANT_False: //nada
+            case CONSTANT_True:  //nada
+            case CONSTANT_Null:  //nada
             default: return;
         }
     }
@@ -85,9 +85,9 @@ public enum ValueKind {
                 break;
             }
             case CONSTANT_Multiname: ((AVM2Name) value).initPool( context ); break;
-            case CONSTANT_False:
-            case CONSTANT_True:
-            case CONSTANT_Null:
+            case CONSTANT_False: //nada
+            case CONSTANT_True:  //nada
+            case CONSTANT_Null:  //nada
             default: return;
         }
     }
@@ -107,9 +107,9 @@ public enum ValueKind {
                 return pool.namespaceIndex( ns.kind, ns.name ).poolIndex;
             }
             case CONSTANT_Multiname: return ((AVM2Name) value).indexIn( pool );
-            case CONSTANT_False:
-            case CONSTANT_True:
-            case CONSTANT_Null:
+            case CONSTANT_False: //nada
+            case CONSTANT_True:  //nada
+            case CONSTANT_Null:  //nada
             default: return 0;
         }
     }

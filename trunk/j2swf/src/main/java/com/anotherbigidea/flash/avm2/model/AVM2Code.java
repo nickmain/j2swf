@@ -471,7 +471,14 @@ public final class AVM2Code {
     public void setProperty( AVM2Name name ) {
         instructions.append( OP_setproperty, name );
     }
-	
+
+    /**
+     * Set a property on the superclass
+     */
+    public void setSuperProperty( AVM2Name name ) {
+        instructions.append( OP_setsuper, name );
+    }
+    
 	/**
 	 * Get a property
 	 */
@@ -486,7 +493,14 @@ public final class AVM2Code {
     public void getProperty( AVM2Name name ) {
         instructions.append( OP_getproperty, name );
     }
-	
+
+    /**
+     * Get a property on the superclass
+     */
+    public void getSuperProperty( AVM2Name name ) {
+        instructions.append( OP_getsuper, name );
+    }
+    
     /**
      * Check whether top is of the given type
      */

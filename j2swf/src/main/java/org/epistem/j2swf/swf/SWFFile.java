@@ -191,6 +191,13 @@ public final class SWFFile {
     }
     
     /**
+     * Set the main class for the SWF
+     */
+    public void setMainClass( String name ) {
+        mainClass = name;
+    }
+    
+    /**
      * Write the SWF that is currently specified to the given file.
      * 
      * @param swfFile the file to create.

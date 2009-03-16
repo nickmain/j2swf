@@ -15,6 +15,7 @@ import org.epistem.io.OutStreamWrapper;
  */
 public enum MultiNameKind {
 
+    GenericName( 29, false, false ), //generic type name
     Qname      ( 7 , false, false ), //qualified name
     QnameA     ( 13, false, false ), //qualified attribute name
     Multiname  ( 9 , false, false ), //name qualified by a set of namespaces

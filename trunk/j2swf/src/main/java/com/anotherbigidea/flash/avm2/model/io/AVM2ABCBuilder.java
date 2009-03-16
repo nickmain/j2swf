@@ -239,6 +239,11 @@ public class AVM2ABCBuilder implements ABC {
                 pool.addName( kind, nameIndex, namespaceIndex, namespaceSetIndex );                    
             }
 
+            /** @see com.anotherbigidea.flash.avm2.ABC.Names#genericName(com.anotherbigidea.flash.avm2.MultiNameKind, int, int[]) */
+            public void genericName( MultiNameKind kind, int typeIndex, int[] typeParamIndices ) {
+                pool.addGenericName( kind, typeIndex, typeParamIndices );                
+            }
+
             /** @see org.epistem.io.PipelineInterface#done() */
             public void done() {
                 // done                    

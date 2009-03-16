@@ -6,6 +6,7 @@
 	<classpathentry kind="src" path="src/ant/resources"/>
 	<classpathentry kind="src" path="src/ant/java"/>
 	<classpathentry kind="src" path="src/legacy/java"/>
+	<classpathentry kind="src" path="src/server/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/ant.jar"/>
 	<classpathentry kind="output" path="eclipse-build"/>

@@ -118,6 +118,7 @@ public enum Operation {
     OP_multiply_i       ( 0xC7, 2, 1, 0, 0 ),
     OP_negate           ( 0x90, 1, 1, 0, 0 ),
     OP_negate_i         ( 0xC4, 1, 1, 0, 0 ),
+    OP_makegeneric      ( 0x53, 1, 1, 0, 0, ARG_COUNT ),
     OP_newactivation    ( 0x57, 0, 1, 0, 0 ),
     OP_newarray         ( 0x56, 0, 1, 0, 0, ARG_COUNT ),
     OP_newcatch         ( 0x5A, 0, 1, 0, 0, CATCH_INDEX ),

@@ -464,6 +464,16 @@ public class ABCWriter implements ABC {
                     break;
                 }
             }         
+        }
+
+        /** @see com.anotherbigidea.flash.avm2.ABC.Names#genericName(com.anotherbigidea.flash.avm2.MultiNameKind, int, int[]) */
+        public void genericName( MultiNameKind kind, int typeIndex, int[] typeParamIndices ) {
+            kind.write( out );
+            out.writeVU30( typeIndex );
+            out.writeVU30( typeParamIndices.length );
+            for( int i = 0; i < typeParamIndices.length; i++ ) {
+                out.writeVU30( typeParamIndices[i] );
+            }            
         }        
     }
     

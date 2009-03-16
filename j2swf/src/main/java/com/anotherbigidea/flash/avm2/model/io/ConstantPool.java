@@ -4,11 +4,7 @@ import java.util.*;
 
 import org.epistem.io.IndentingPrintWriter;
 
-import com.anotherbigidea.flash.avm2.ABC;
-import com.anotherbigidea.flash.avm2.MultiName;
-import com.anotherbigidea.flash.avm2.MultiNameKind;
-import com.anotherbigidea.flash.avm2.Namespace;
-import com.anotherbigidea.flash.avm2.NamespaceKind;
+import com.anotherbigidea.flash.avm2.*;
 
 
 /**
@@ -229,6 +225,24 @@ public final class ConstantPool {
     }
     
     /**
+     * Get or create a generic name entry
+     */
+    public GenericName nameIndex( MultiNameKind kind, int typeIndex, int[] typeParamIndices ) {
+        
+        String key = kind.name() + ":" + typeIndex + ":" + Arrays.toString( typeParamIndices );
+        Integer index = nameIndices.get( key );
+        if( index != null ) {
+            return (GenericName) namePool.get( index - 1 );
+        }
+        
+        index = namePool.size() + 1;        
+        GenericName gn = new GenericName( kind, index, typeIndex, typeParamIndices );
+        namePool.add( gn );
+        nameIndices.put( key, index );
+        return gn;
+    }
+    
+    /**
      * Get the name at the given pool index
      */
     public MultiName nameAt( int index ) {
@@ -438,6 +452,16 @@ public final class ConstantPool {
         nameIndices.put( key, index );
     }
     
+    public void addGenericName( MultiNameKind kind, int typeIndex, int[] typeParamIndices ) {
+        
+        String key = kind.name() + ":" + typeIndex + ":" + Arrays.toString( typeParamIndices );
+        
+        int index = namePool.size() + 1;        
+        GenericName gn = new GenericName( kind, index, typeIndex, typeParamIndices );
+        namePool.add( gn );
+        nameIndices.put( key, index );
+    }
+    
     /**
      * Write the pool
      */
@@ -489,6 +513,13 @@ public final class ConstantPool {
         ABC.Names names = file.namePool( namePool.isEmpty() ? 0 : namePool.size() + 1 );
         if( names != null ) {
             for( MultiName n : namePool ) {
+                
+                if( n instanceof GenericName ) {
+                    GenericName gn = (GenericName) n;
+                    names.genericName( gn.kind, gn.typeIndex, gn.typeParamIndices );
+                    continue;
+                }
+                
                 names.name( n.kind, 
                             n.nameIndex, 
                             (n.namespace == null) ? 0 : n.namespace.poolIndex, 

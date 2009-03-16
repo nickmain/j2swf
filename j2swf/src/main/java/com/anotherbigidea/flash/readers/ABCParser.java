@@ -510,6 +510,18 @@ public class ABCParser {
                 break;
             }
         
+            case GenericName: {
+                int typeIndex = in.readVU30();
+                int count     = in.readVU30();
+                int[] typeParamIndices = new int[count];
+                for( int i = 0; i < typeParamIndices.length; i++ ) {
+                    typeParamIndices[i] = in.readVU30();
+                }
+                
+                if( names != null ) names.genericName( kind, typeIndex, typeParamIndices );
+                return;
+            }
+            
             default: throw new IOException( "Unknown name kind: " + kind );
         }
         

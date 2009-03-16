@@ -591,5 +591,16 @@ public interface ABC extends PipelineInterface {
                           int nameIndex, 
                           int namespaceIndex, 
                           int namespaceSetIndex );
+
+        /**
+         * Pass a generic type name
+         * 
+         * @param kind the kind = GenericName
+         * @param typeIndex the name-pool index of the type name
+         * @param typeParamIndices the name-pool indices of the type parameters
+         */
+        public void genericName( MultiNameKind kind,
+                                 int typeIndex,
+                                 int[] typeParamIndices );
     }   
 }

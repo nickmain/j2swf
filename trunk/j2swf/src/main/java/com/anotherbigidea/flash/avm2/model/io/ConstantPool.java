@@ -235,8 +235,14 @@ public final class ConstantPool {
             return (GenericName) namePool.get( index - 1 );
         }
         
+        MultiName type = nameAt( typeIndex );
+        MultiName[] typeParams = new MultiName[ typeParamIndices.length ];
+        for( int i = 0; i < typeParams.length; i++ ) {
+            typeParams[i] = nameAt( typeParamIndices[i] );
+        }
+
         index = namePool.size() + 1;        
-        GenericName gn = new GenericName( kind, index, typeIndex, typeParamIndices );
+        GenericName gn = new GenericName( kind, index, type, typeParams, typeIndex, typeParamIndices );
         namePool.add( gn );
         nameIndices.put( key, index );
         return gn;
@@ -456,8 +462,14 @@ public final class ConstantPool {
         
         String key = kind.name() + ":" + typeIndex + ":" + Arrays.toString( typeParamIndices );
         
+        MultiName type = nameAt( typeIndex );
+        MultiName[] typeParams = new MultiName[ typeParamIndices.length ];
+        for( int i = 0; i < typeParams.length; i++ ) {
+            typeParams[i] = nameAt( typeParamIndices[i] );
+        }
+        
         int index = namePool.size() + 1;        
-        GenericName gn = new GenericName( kind, index, typeIndex, typeParamIndices );
+        GenericName gn = new GenericName( kind, index, type, typeParams, typeIndex, typeParamIndices );
         namePool.add( gn );
         nameIndices.put( key, index );
     }

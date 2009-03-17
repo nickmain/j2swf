@@ -10,6 +10,16 @@ import java.util.Arrays;
 public class GenericName extends MultiName {
 
     /**
+     * The generic type
+     */
+    public final MultiName type;
+    
+    /**
+     * The type parameters
+     */
+    public final MultiName[] typeParams;
+    
+    /**
      * Index of the type
      */
     public final int typeIndex;
@@ -19,10 +29,12 @@ public class GenericName extends MultiName {
      */
     public final int[] typeParamIndices;
     
-    public GenericName( MultiNameKind kind, int index, int typeIndex, int...typeParamIndices ) {
+    public GenericName( MultiNameKind kind, int index, MultiName type, MultiName[] typeParams, int typeIndex, int...typeParamIndices ) {
         super( kind, index, null, 0, null, 0, null );
         this.typeIndex        = typeIndex;
         this.typeParamIndices = typeParamIndices;
+        this.type             = type;
+        this.typeParams       = typeParams;
     }
     
     @Override

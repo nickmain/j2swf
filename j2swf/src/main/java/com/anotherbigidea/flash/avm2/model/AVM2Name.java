@@ -7,10 +7,7 @@ import java.util.List;
 
 import org.epistem.io.IndentingPrintWriter;
 
-import com.anotherbigidea.flash.avm2.MultiName;
-import com.anotherbigidea.flash.avm2.MultiNameKind;
-import com.anotherbigidea.flash.avm2.Namespace;
-import com.anotherbigidea.flash.avm2.NamespaceKind;
+import com.anotherbigidea.flash.avm2.*;
 import com.anotherbigidea.flash.avm2.model.io.ConstantPool;
 
 /**
@@ -155,6 +152,15 @@ public abstract class AVM2Name implements Comparable<AVM2Name> {
             case MultinameLA: return new AVM2LateAttrMultiname( nsSet ); 
             case RTQnameL:    return new AVM2LateRuntimeQName();
             case RTQnameLA:   return new AVM2LateRuntimeQAttrName();
+            case GenericName: {
+                GenericName gn = (GenericName) mn;
+                AVM2Name type = from( gn.type );
+                AVM2Name[] params = new AVM2Name[ gn.typeParams.length ];
+                for( int i = 0; i < params.length; i++ ) {
+                    params[i] = from( gn.typeParams[i] );
+                }
+                return new AVM2GenericName( type, params );
+            }
         }
         
         return null;

@@ -813,7 +813,7 @@ public final class AVM2Code {
     /**
      * Coerce stack top to the given type
      */
-    public void coerceTo( AVM2QName type ) {
+    public void coerceTo( AVM2Name type ) {
         instructions.append( OP_coerce, type );
     }
 
@@ -1160,6 +1160,15 @@ public final class AVM2Code {
 		instructions.append( OP_getlex, name );
 	}
 
+	/**
+	 * Make a generic type
+	 * 
+	 * @param typeParamCount the number of type parameters
+	 */
+	public void makeGeneric( int typeParamCount ) {
+        instructions.append( OP_makegeneric, typeParamCount );	    
+	}
+	
     /**
      * A no-op
      */
@@ -1234,7 +1243,16 @@ public final class AVM2Code {
     public void constructProp( AVM2Name name, int argCount ) {
         instructions.append( OP_constructprop, name, argCount );
     }
-	
+
+    /**
+     * Construct an object from a type on the stack
+     * 
+     * @param argCount the argument count
+     */
+    public void construct( int argCount ) {
+        instructions.append( OP_construct, argCount );
+    }
+
 	/**
 	 * Throw the exception from the stack
 	 */

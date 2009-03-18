@@ -606,7 +606,8 @@ public class Instruction {
             case OP_throw : instrs.throw_( ); break;
             case OP_timestamp : instrs.timestamp( ); break;
             case OP_typeof : instrs.typeof( ); break;
-            case OP_urshift : instrs.urshift( ); break;        
+            case OP_urshift : instrs.urshift( ); break;
+            case OP_makegeneric: instrs.makegeneric( (Integer) arguments[0] ); break;
             default: throw new RuntimeException( "Unknown operation " + operation );        
         }
     }

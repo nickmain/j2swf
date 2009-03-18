@@ -799,4 +799,9 @@ public abstract class InstructionsImpl implements ABC.Instructions {
     public void urshift() {
         if( instructions != null ) instructions. urshift();
     }
+
+    /** @see com.anotherbigidea.flash.avm2.ABC.Instructions#makegeneric(int) */
+    public void makegeneric( int typeParamCount ) {
+        if( instructions != null ) instructions.makegeneric( typeParamCount );        
+    }
 }

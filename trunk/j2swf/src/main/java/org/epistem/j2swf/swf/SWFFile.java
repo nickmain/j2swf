@@ -27,7 +27,7 @@ public final class SWFFile {
     private int width      = 500;
     private int height     = 450;
     private int frameRate  = 12;
-    private int version    = 9;
+    private int version    = 10;
     private Color background = Color.WHITE;
     
     private final SortedMap<Integer,String> sceneNames = new TreeMap<Integer, String>(); 

@@ -353,6 +353,7 @@ public interface ABC extends PipelineInterface {
         public void timestamp( );
         public void typeof( );
         public void urshift( );
+        public void makegeneric( int typeParamCount );
     }
     
     /**

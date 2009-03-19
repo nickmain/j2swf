@@ -123,9 +123,11 @@ public class AVM2Class implements Comparable<AVM2Class> {
         out.println( " " + name.namespace.name + "." + name.name + " {" );        
         out.indent();
         
+        if( superclass != null ) {
         out.print( "extends " );
-        superclass.dump( out );
+        superclass.dump( out );        
         out.println();
+        }
         
         for( AVM2Name iface : interfaces ) {
             out.print( "implements " );

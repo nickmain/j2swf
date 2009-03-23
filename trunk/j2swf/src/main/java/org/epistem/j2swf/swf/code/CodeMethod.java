@@ -24,7 +24,11 @@ public class CodeMethod {
             methodSlot.method.addParameter( "arg" + i, paramTypes[i], null );
         }
         
-        code = new AVM2Code( methodSlot.method.methodBody, null, paramTypes.length, false );
+        code = makeCode( paramTypes );
+    }
+
+    protected AVM2Code makeCode( AVM2Name... paramTypes ) {
+        return new AVM2Code( methodSlot.method.methodBody, null, paramTypes.length, false );        
     }
     
     /**

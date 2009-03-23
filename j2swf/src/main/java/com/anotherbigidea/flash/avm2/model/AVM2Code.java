@@ -1417,9 +1417,15 @@ public final class AVM2Code {
         public int finish() {
             
             //push the superclass and create the new class   
-            code.getLex( avm2Class.superclass );
+            if( avm2Class.superclass != null ) {
+                code.getLex( avm2Class.superclass );
+            }
+            else {
+                code.pushNull();
+            }
+
             code.newClass( avm2Class );
-                
+            
             //tear down the scope stack, except the global object
             for( int i = 0; i < numSuperclasses; i++ ) {
                 code.popScope();   

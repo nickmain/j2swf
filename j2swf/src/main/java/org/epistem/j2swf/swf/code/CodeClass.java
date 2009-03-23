@@ -1,10 +1,8 @@
 package org.epistem.j2swf.swf.code;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.anotherbigidea.flash.avm2.MethodInfoFlags;
 import com.anotherbigidea.flash.avm2.NamespaceKind;
 import com.anotherbigidea.flash.avm2.model.*;
 
@@ -37,7 +35,9 @@ public class CodeClass {
                        String... superclasses ) {
 
         this.abcFile = abcFile;
-        String superclass = superclasses[ superclasses.length - 1 ];
+        String superclass = (superclasses.length > 0) ? 
+                                superclasses[ superclasses.length - 1 ] :
+                                null;
        
         //protected ns is pkg:shortname
         String pkg = "";
@@ -49,7 +49,9 @@ public class CodeClass {
         }
        
         AVM2QName qname      = new AVM2QName( name );
-        AVM2QName qnameSuper = new AVM2QName( superclass );
+        AVM2QName qnameSuper = (superclass != null) ?
+                                   new AVM2QName( superclass ) :
+                                   null;
         AVM2Namespace protNS = 
             new AVM2Namespace( NamespaceKind.ProtectedNamespace, 
                                pkg + ":" + shortName );      
@@ -113,6 +115,25 @@ public class CodeClass {
         method.methodBody.scopeDepth = scopeDepth + 1;
         AVM2MethodSlot slot = avm2class.traits.addMethod( name, method, isFinal, isOverride );
         CodeMethod cm = new CodeMethod( this, slot, paramTypes );
+        methods.add( cm );
+        return cm;
+    }
+    
+    /**
+     * Add an abstract method
+     * 
+     * @param name the method name
+     * @param returnType the return type
+     * @param isOverride whether an override method
+     * @param paramTypes the parameters types
+     */
+    public CodeMethod addAbstractMethod( AVM2QName name, AVM2Name returnType,
+                                         boolean isOverride, 
+                                         AVM2Name... paramTypes ) {
+        
+        AVM2Method method = new AVM2Method( returnType, null );
+        AVM2MethodSlot slot = avm2class.traits.addMethod( name, method, false, isOverride );
+        CodeMethod cm = new CodeAbstractMethod( this, slot, paramTypes );
         methods.add( cm );
         return cm;
     }

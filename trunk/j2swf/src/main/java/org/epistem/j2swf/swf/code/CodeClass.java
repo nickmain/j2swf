@@ -18,7 +18,7 @@ public class CodeClass {
     public final AVM2ABCFile abcFile; //TODO: this should be hidden 
     public final AVM2Class avm2class; //TODO: this should be hidden
     
-    private final int scopeDepth;
+    /*pkg*/ final int scopeDepth;
     private final Set<CodeMethod> methods = new HashSet<CodeMethod>();
     
     /**
@@ -67,10 +67,17 @@ public class CodeClass {
             script.addSuperclass( supclass );
         }
         scopeDepth = script.finish();
-        
-        //create the static initializer
+
         AVM2Code.defaultStaticInit( avm2class, scopeDepth );
-        //TODO:expose non-default static init
+    }
+    
+    /**
+     * Add a static initializer
+     */
+    public CodeClassInitializer addStaticInitializer() {
+        CodeClassInitializer init = new CodeClassInitializer( this );
+        methods.add( init );
+        return init;
     }
     
     /**
@@ -78,9 +85,7 @@ public class CodeClass {
      */
     /*pkg*/ void prepareForWriting() {
         for( CodeMethod method : methods ) method.prepareForWriting();
-
         
-        //TODO: prepare static init
         //TODO: prepare constructor
     }
     

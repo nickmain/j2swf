@@ -12,9 +12,9 @@ import com.anotherbigidea.flash.avm2.model.AVM2QName;
  */
 public class CodeMethod {
 
-    private final CodeClass codeClass;
-    private final AVM2MethodSlot methodSlot;
-    private final AVM2Code code;
+    protected final CodeClass codeClass;
+    protected final AVM2MethodSlot methodSlot;
+    protected final AVM2Code code;
     
     /*pkg*/ CodeMethod( CodeClass codeClass, AVM2MethodSlot methodSlot, AVM2Name... paramTypes ) {
         this.codeClass  = codeClass;
@@ -50,5 +50,19 @@ public class CodeMethod {
      */
     public AVM2QName name() {
         return methodSlot.name;
+    }
+
+    /** @see java.lang.Object#equals(java.lang.Object) */
+    @Override
+    public boolean equals( Object obj ) {
+        if( obj == null || !( obj instanceof CodeMethod ) ) return false;
+        
+        return ((CodeMethod) obj).name().equals( name() );
+    }
+
+    /** @see java.lang.Object#hashCode() */
+    @Override
+    public int hashCode() {
+        return name().hashCode();
     }
 }

@@ -31,7 +31,8 @@ public class CodeClass {
      */
     /*pkg*/ CodeClass( AVM2ABCFile abcFile,
                        String name,
-                       boolean isSealed, boolean isFinal, boolean isInterface,
+                       String initCall,
+                       boolean isSealed, boolean isFinal, boolean isInterface,                       
                        String... superclasses ) {
 
         this.abcFile = abcFile;
@@ -66,7 +67,9 @@ public class CodeClass {
         for( String supclass : superclasses ) {
             script.addSuperclass( supclass );
         }
-        scopeDepth = script.finish();
+        
+        AVM2QName initCallName = (initCall != null) ? new AVM2QName( initCall ) : null;
+        scopeDepth = script.finish( initCallName );
 
         AVM2Code.defaultStaticInit( avm2class, scopeDepth );
     }

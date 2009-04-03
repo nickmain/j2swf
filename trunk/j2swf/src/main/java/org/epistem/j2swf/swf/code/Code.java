@@ -52,17 +52,18 @@ public class Code extends ControlTag {
      * Add a new class
      * 
      * @param name the fully qualified class name
+     * @param initCall the name of a void/no-arg static init method to call - null for none
      * @param superclasses the names of the superclasses in order from top to bottom
      * @param isSealed whether the class is sealed (true) or dynamic
      * @param isFinal whether the class is final
      * @param isInterface whether the class is an interface
      * @return the new class
      */
-    public CodeClass addClass( String name,
+    public CodeClass addClass( String name, String initCall,
                                boolean isSealed, boolean isFinal, boolean isInterface,
                                String... superclasses ) {
 
-        CodeClass cc = new CodeClass( abcFile, name,
+        CodeClass cc = new CodeClass( abcFile, name, initCall,
                                       isSealed, isFinal, isInterface,
                                       superclasses );
         classes.put( name, cc );        

@@ -1412,9 +1412,12 @@ public final class AVM2Code {
         
         /**
          * Finish the script
+         * 
+         * @param initCall name of a static method to call on the class
+         *                 once it is initialized - null if none
          * @return the scope depth for the class
          */
-        public int finish() {
+        public int finish( AVM2QName initCall ) {
             
             //push the superclass and create the new class   
             if( avm2Class.superclass != null ) {
@@ -1431,13 +1434,34 @@ public final class AVM2Code {
                 code.popScope();   
             }
             
+            LocalValue<Instruction> classLocal = null;
+            if( initCall != null ) {
+                classLocal = code.newLocal();
+                code.dup();
+                code.setLocal( classLocal );
+            }
+            
             //initialize the class slot (of the script object)
             code.initProperty( avm2Class.name );
+            
+            if( initCall != null ) {
+                code.getLocal( classLocal );
+                code.callPropVoid( initCall, 0 );
+            }            
             
             code.returnVoid();
             code.analyze();
             
             return code.body.maxScope;
+        }
+    
+        /**
+         * Finish the script
+         * 
+         * @return the scope depth for the class
+         */
+        public int finish() {
+            return finish( null );
         }
     }
 }

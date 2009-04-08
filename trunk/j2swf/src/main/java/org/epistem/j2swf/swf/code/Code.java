@@ -1,6 +1,7 @@
 package org.epistem.j2swf.swf.code;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,7 +9,10 @@ import java.util.Map;
 import org.epistem.j2swf.swf.ControlTag;
 
 import com.anotherbigidea.flash.avm2.ABC;
+import com.anotherbigidea.flash.avm2.MethodInfoFlags;
 import com.anotherbigidea.flash.avm2.model.AVM2ABCFile;
+import com.anotherbigidea.flash.avm2.model.AVM2Method;
+import com.anotherbigidea.flash.avm2.model.AVM2Name;
 import com.anotherbigidea.flash.interfaces.SWFTagTypes;
 
 /**
@@ -70,6 +74,19 @@ public class Code extends ControlTag {
         return cc;
     }
 
+    /**
+     * Add a standalone function to the code
+     * 
+     * TODO: wrap AVM2Method in CodeMethod or create a CodeFunction ?
+     * 
+     * @param retType the function return type
+     * @return the function method
+     */
+    public AVM2Method addFunction( AVM2Name retType ) {        
+        return abcFile.addFunctionClosure( retType, 
+                                           EnumSet.noneOf( MethodInfoFlags.class ) );        
+    }
+    
     /**
      * Get a class
      * @param name the class name

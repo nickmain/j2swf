@@ -40,8 +40,8 @@ public final class AVM2Code {
         
     }
     
-	private final AVM2MethodBody body;
-	private final InstructionList instructions;
+	public final AVM2MethodBody body;
+	public final InstructionList instructions;
 	private Map<String, Integer> labelInts;
 	private int labelIndex = 0;
 
@@ -967,11 +967,11 @@ public final class AVM2Code {
     /**
      * Call a property on an object.  There is no return value.
      * 
-     * @param qualifiedName the prop name
+     * @param name the prop name
      * @param argCount the number of arguments
      */
-    public void callPropVoid( AVM2QName qualifiedName, int argCount ) {
-        instructions.append( OP_callpropvoid, qualifiedName, argCount );
+    public void callPropVoid( AVM2Name name, int argCount ) {
+        instructions.append( OP_callpropvoid, name, argCount );
     }
 
     /**
@@ -987,11 +987,11 @@ public final class AVM2Code {
     /**
      * Call a property on an object.
      * 
-     * @param qualifiedName the prop name
+     * @param name the prop name
      * @param argCount the number of arguments
      */
-    public void callProperty( AVM2QName qualifiedName, int argCount ) {
-        instructions.append( OP_callproperty, qualifiedName, argCount );
+    public void callProperty( AVM2Name name, int argCount ) {
+        instructions.append( OP_callproperty, name, argCount );
     }
 
     /**

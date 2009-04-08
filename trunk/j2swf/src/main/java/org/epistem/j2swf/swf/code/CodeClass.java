@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.anotherbigidea.flash.avm2.NamespaceKind;
+import com.anotherbigidea.flash.avm2.Operation;
+import com.anotherbigidea.flash.avm2.instruction.Instruction;
 import com.anotherbigidea.flash.avm2.model.*;
 
 /**
@@ -18,8 +20,10 @@ public class CodeClass {
     public final AVM2ABCFile abcFile; //TODO: this should be hidden 
     public final AVM2Class avm2class; //TODO: this should be hidden
     
-    /*pkg*/ final int scopeDepth;
+    protected final int scopeDepth;
     private final Set<CodeMethod> methods = new HashSet<CodeMethod>();
+    
+    private CodeClassInitializer staticInit;
     
     /**
      * @param name the fully qualified class name
@@ -75,18 +79,39 @@ public class CodeClass {
     }
     
     /**
-     * Add a static initializer
+     * Wrap another class for overriding purposes
      */
-    public CodeClassInitializer addStaticInitializer() {
-        CodeClassInitializer init = new CodeClassInitializer( this );
-        methods.add( init );
-        return init;
+    protected CodeClass( CodeClass other ) {
+        this.abcFile    = other.abcFile;
+        this.avm2class  = other.avm2class;
+        this.scopeDepth = other.scopeDepth;
+    }
+    
+    /**
+     * Get the static initializer
+     */
+    public CodeClassInitializer getStaticInitializer() {
+        if( staticInit == null ) {
+            staticInit = new CodeClassInitializer( this );
+            methods.add( staticInit );
+        }
+        
+        return staticInit;
     }
     
     /**
      * Prepare the class for writing - perform any code analysis etc
      */
     /*pkg*/ void prepareForWriting() {
+        
+        //make sure that the static initializer is terminated
+        if( staticInit != null ) {
+            Instruction last = staticInit.code.instructions.last();
+            if( last == null || last.operation != Operation.OP_returnvoid ) {
+                staticInit.code.returnVoid();
+            }
+        }
+        
         for( CodeMethod method : methods ) method.prepareForWriting();
         
         //TODO: prepare constructor

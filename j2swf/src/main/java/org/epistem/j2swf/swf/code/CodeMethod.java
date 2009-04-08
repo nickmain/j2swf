@@ -16,12 +16,14 @@ public class CodeMethod {
     protected final AVM2MethodSlot methodSlot;
     protected final AVM2Code code;
     
-    /*pkg*/ CodeMethod( CodeClass codeClass, AVM2MethodSlot methodSlot, AVM2Name... paramTypes ) {
+    public CodeMethod( CodeClass codeClass, AVM2MethodSlot methodSlot, AVM2Name... paramTypes ) {
         this.codeClass  = codeClass;
         this.methodSlot = methodSlot;
         
-        for( int i = 0; i < paramTypes.length; i++ ) {
-            methodSlot.method.addParameter( "arg" + i, paramTypes[i], null );
+        if( methodSlot != null ) {
+            for( int i = 0; i < paramTypes.length; i++ ) {
+                methodSlot.method.addParameter( "arg" + i, paramTypes[i], null );
+            }
         }
         
         code = makeCode( paramTypes );

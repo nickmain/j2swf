@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.anotherbigidea.flash.avm2.NamespaceKind;
 import com.anotherbigidea.flash.avm2.Operation;
+import com.anotherbigidea.flash.avm2.ValueKind;
 import com.anotherbigidea.flash.avm2.instruction.Instruction;
 import com.anotherbigidea.flash.avm2.model.*;
 
@@ -22,6 +23,7 @@ public class CodeClass {
     
     protected final int scopeDepth;
     private final Set<CodeMethod> methods = new HashSet<CodeMethod>();
+    private final Set<CodeField>  fields  = new HashSet<CodeField>();
     
     private CodeClassInitializer staticInit;
     
@@ -188,4 +190,94 @@ public class CodeClass {
         methods.add( cm );
         return cm;
     }
+    
+    /**
+     * Add a field
+     * 
+     * @param name the field name
+     * @param type the field type
+     * @param defaultValue the default value - may be null
+     */
+    public final CodeField addField( AVM2QName name, AVM2Name type, Object defaultValue ) {
+        return addField( name, type, defaultValue, false, false );
+    }
+
+    /**
+     * Add a static field
+     * 
+     * @param name the field name
+     * @param type the field type
+     * @param defaultValue the default value - may be null
+     */
+    public final CodeField addStaticField(  AVM2QName name, AVM2Name type, Object defaultValue ) {
+        return addField( name, type, defaultValue, true, false );
+    }
+
+    /**
+     * Add a constant
+     * 
+     * @param name the field name
+     * @param type the field type
+     * @param defaultValue the default value - may be null
+     */
+    public final CodeField addConstant( AVM2QName name, AVM2Name type, Object defaultValue ) {
+        return addField( name, type, defaultValue, false, true );
+    }
+
+    /**
+     * Add a static constant
+     * 
+     * @param name the field name
+     * @param type the field type
+     * @param defaultValue the default value - may be null
+     */
+    public final CodeField addStaticConstant( AVM2QName name, AVM2Name type, Object defaultValue ) {
+        return addField( name, type, defaultValue, true, true );
+    }
+    
+    /** Add field */
+    protected CodeField addField( AVM2QName name, AVM2Name type, Object defaultValue, boolean isStatic, boolean isConstant ) {
+        AVM2Traits traits = isStatic ? avm2class.staticTraits : avm2class.traits;
+        AVM2Slot   slot   = isConstant ? 
+                                traits.addConst( name, type, makeValue( defaultValue, type )) :
+                                traits.addVar( name, type, makeValue( defaultValue, type ));
+                                
+        CodeField field =  new CodeField( this, slot, isStatic, isConstant );
+        fields.add( field );
+        return field;
+    }
+    
+    //make a field default value
+    protected AVM2DefaultValue makeValue( Object value, AVM2Name type ) {
+        if( value == null ) return null;
+        
+        if( value instanceof Integer ) {
+            
+            if( type.equals( AVM2StandardName.TypeBoolean.qname ) ) {
+                if( ((Integer)value).intValue() == 0 ) {
+                    return new AVM2DefaultValue( ValueKind.CONSTANT_False, null );
+                }
+                else {
+                    return new AVM2DefaultValue( ValueKind.CONSTANT_True, null );                            
+                }
+            }
+            else {
+                return new AVM2DefaultValue( ValueKind.CONSTANT_Int, value );
+            }
+        }
+        else if( value instanceof Long ) { //TODO: long support
+            return new AVM2DefaultValue( ValueKind.CONSTANT_Double, ((Long)value).doubleValue() ); 
+        }
+        else if( value instanceof Double ) {
+            return new AVM2DefaultValue( ValueKind.CONSTANT_Double, value ); 
+        }
+        else if( value instanceof Float ) {
+            return new AVM2DefaultValue( ValueKind.CONSTANT_Double, ((Float)value).doubleValue() ); 
+        }
+        else if( value instanceof String ) {
+            return new AVM2DefaultValue( ValueKind.CONSTANT_Utf8, value ); 
+        }
+        else throw new RuntimeException( "Unknown constant type" );
+    }
+    
 }

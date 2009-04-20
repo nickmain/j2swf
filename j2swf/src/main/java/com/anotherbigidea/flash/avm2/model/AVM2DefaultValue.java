@@ -1,5 +1,7 @@
 package com.anotherbigidea.flash.avm2.model;
 
+import java.io.StringWriter;
+
 import org.epistem.io.IndentingPrintWriter;
 
 import com.anotherbigidea.flash.avm2.MultiName;
@@ -42,5 +44,14 @@ public class AVM2DefaultValue {
      */
     public void initPool( AVM2ABCFile.WriteContext context ) {
         valueKind.initPool( context, value );
+    }
+    
+    @Override
+    public String toString() {
+        StringWriter sw = new StringWriter();
+        IndentingPrintWriter ipw = new IndentingPrintWriter( sw );        
+        dump( ipw );
+        ipw.flush();
+        return sw.toString();    
     }
 }

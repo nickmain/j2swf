@@ -111,10 +111,17 @@ public class Code extends ControlTag {
         for( CodeClass cc : classes.values() ) {
             cc.prepareForWriting();
         }
-        
-        //TODO: prepare scripts
+       
+        prepareABCforWriting( abcFile );
         
         ABC abc = tags.tagDoABC( lazyInit ? 1 : 0, name );
         abcFile.write( abc );
+    }
+    
+    /**
+     * Override to allow the ABC file to be manipulated before writing
+     */
+    protected void prepareABCforWriting( AVM2ABCFile abc ) {
+        //to be overridden
     }
 }

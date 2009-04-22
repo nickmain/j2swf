@@ -59,7 +59,7 @@ public class CodeClass {
         AVM2QName qnameSuper = (superclass != null) ?
                                    new AVM2QName( superclass ) :
                                    null;
-        AVM2Namespace protNS = 
+        AVM2Namespace protNS = isInterface ? null :
             new AVM2Namespace( NamespaceKind.ProtectedNamespace, 
                                pkg + ":" + shortName );      
        

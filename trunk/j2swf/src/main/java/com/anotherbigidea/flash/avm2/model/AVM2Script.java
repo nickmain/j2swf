@@ -72,4 +72,21 @@ public class AVM2Script implements AVM2MethodContainer {
             traits.write( t, context );
         }
     }
+ 
+    /**
+     * Find the class slot of the script - presumably the class that this
+     * script is responsible for setting up
+     * 
+     * @return null if no class slot could be found
+     */
+    public AVM2QName findClassSlot() {
+        for( AVM2Trait t : traits.traits ) {
+            if( t instanceof AVM2ClassSlot ) {
+                AVM2ClassSlot slot = (AVM2ClassSlot) t;
+                return slot.className;
+            }
+        }
+        
+        return null;
+    }
 }

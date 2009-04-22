@@ -36,6 +36,8 @@ public class AVM2ABCFile {
     private final List<AVM2Method> methods_internal = new ArrayList<AVM2Method>();
     { methods = Collections.unmodifiableList( methods_internal ); }
     
+    private Comparator<AVM2Script> scriptSorter;
+    
     /**
      * Use the default (most current) major and minor versions
      */
@@ -50,6 +52,15 @@ public class AVM2ABCFile {
     public AVM2ABCFile( int majorVersion, int minorVersion ) {
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
+    }
+    
+    /**
+     * Set a comparator that will sort the scripts before the file is
+     * written. The order of scripts can be important (superclasses need to
+     * be setup before subclasses).
+     */
+    public void setScriptSort( Comparator<AVM2Script> comparator ) {
+        scriptSorter = comparator;
     }
     
     /**
@@ -245,6 +256,10 @@ public class AVM2ABCFile {
         
         ABC.Scripts scripts = file.scripts( scripts_internal.size() );
         if( scripts != null ) {
+            if( scriptSorter != null ) {
+                Collections.sort( scripts_internal, scriptSorter );
+            }
+            
             for( AVM2Script s : scripts_internal ) s.write( scripts, context );
             scripts.done();
         }

@@ -17,9 +17,6 @@ import com.anotherbigidea.flash.avm2.model.*;
  * @author nickmain
  */
 public class CodeClass {
-
-    public final AVM2ABCFile abcFile; //TODO: this should be hidden 
-    public final AVM2Class avm2class; //TODO: this should be hidden
     
     protected final int scopeDepth;
     private final Set<CodeMethod> methods = new HashSet<CodeMethod>();
@@ -32,16 +29,28 @@ public class CodeClass {
      * @param superclasses the names of the superclasses in order from top to bottom
      * @param isSealed whether the class is sealed (true) or dynamic
      * @param isFinal whether the class is final
+     * @return the new class
+     */
+    /*pkg*/ CodeClass( String name,
+                       String initCall,
+                       boolean isSealed, boolean isFinal,                       
+                       String... superclasses ) {
+        this( name, initCall, isSealed, isFinal, false, superclasses );
+    }
+    
+    /**
+     * @param name the fully qualified class name
+     * @param superclasses the names of the superclasses in order from top to bottom
+     * @param isSealed whether the class is sealed (true) or dynamic
+     * @param isFinal whether the class is final
      * @param isInterface whether the class is an interface
      * @return the new class
      */
-    /*pkg*/ CodeClass( AVM2ABCFile abcFile,
-                       String name,
+    /*pkg*/ CodeClass( String name,
                        String initCall,
                        boolean isSealed, boolean isFinal, boolean isInterface,                       
                        String... superclasses ) {
 
-        this.abcFile = abcFile;
         String superclass = (superclasses.length > 0) ? 
                                 superclasses[ superclasses.length - 1 ] :
                                 null;
@@ -63,9 +72,9 @@ public class CodeClass {
             new AVM2Namespace( NamespaceKind.ProtectedNamespace, 
                                pkg + ":" + shortName );      
        
-        avm2class = abcFile.addClass( qname, qnameSuper, 
-                                      isSealed, isFinal, isInterface, 
-                                      protNS );
+        avm2class = new AVM2Class( null, 0, qname, qnameSuper, 
+                                   isSealed, isFinal, isInterface, 
+                                   protNS );
         
         //create the initialization script
         AVM2Code.ClassInitializationScript script = 
@@ -84,7 +93,6 @@ public class CodeClass {
      * Wrap another class for overriding purposes
      */
     protected CodeClass( CodeClass other ) {
-        this.abcFile    = other.abcFile;
         this.avm2class  = other.avm2class;
         this.scopeDepth = other.scopeDepth;
     }

@@ -23,8 +23,8 @@ import com.anotherbigidea.flash.interfaces.SWFTagTypes;
 public class Code extends ControlTag {
 
     private boolean lazyInit = true;
-    private final AVM2ABCFile abcFile = new AVM2ABCFile();
     private final Map<String, CodeClass> classes = new LinkedHashMap<String, CodeClass>();
+    private final Map<String, CodeInterface> interfaces = new LinkedHashMap<String, CodeInterface>();
     
     /**
      * The name of this code chunk
@@ -60,20 +60,32 @@ public class Code extends ControlTag {
      * @param superclasses the names of the superclasses in order from top to bottom
      * @param isSealed whether the class is sealed (true) or dynamic
      * @param isFinal whether the class is final
-     * @param isInterface whether the class is an interface
      * @return the new class
      */
     public CodeClass addClass( String name, String initCall,
-                               boolean isSealed, boolean isFinal, boolean isInterface,
+                               boolean isSealed, boolean isFinal, 
                                String... superclasses ) {
 
-        CodeClass cc = new CodeClass( abcFile, name, initCall,
-                                      isSealed, isFinal, isInterface,
+        CodeClass cc = new CodeClass( name, initCall,
+                                      isSealed, isFinal,
                                       superclasses );
         classes.put( name, cc );        
         return cc;
     }
 
+    /**
+     * Add a new interface
+     * 
+     * @param name the fully qualified class name
+     * @param superIfaces the names of the super-interfaces
+     * @return the new interface
+     */
+    public CodeInterface addInterface( String name, String...superIfaces ) {
+        CodeInterface iface = new CodeInterface( name, superIfaces );
+        interfaces.put( name, iface );
+        return iface;
+    }
+    
     /**
      * Add a standalone function to the code
      * 
@@ -107,6 +119,8 @@ public class Code extends ControlTag {
      * @see org.epistem.j2swf.swf.Tag#write(com.anotherbigidea.flash.interfaces.SWFTagTypes)
      */
     protected void write( SWFTagTypes tags ) throws IOException {    
+        
+        AVM2ABCFile abcFile = new AVM2ABCFile();
         
         for( CodeClass cc : classes.values() ) {
             cc.prepareForWriting();
